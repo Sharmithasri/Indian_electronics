@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Stutus - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" type="image/x-icon" href="static/Indian_logo.png">
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+         box-sizing:
+         border-box;
+         }
+        body { font-family: 'Poppins', sans-serif; background:#F4F4F4; min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; }
+
+
+        .bg-animation { position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; overflow:hidden; }
+        .bg-animation::before, .bg-animation::after { content: ''; position:absolute; border-radius:50%; filter: blur(80px); animation: float 8s ease-in-out infinite; }
+        .bg-animation::before { width: 400px; height: 400px; background: rgba(50,213,131,0.15); top:-100px; left:-100px; }
+        .bg-animation::after { width: 500px; height: 500px; background: rgba(50,213,131,0.1); bottom:-150px; right:-150px; animation-delay:2s; }
+        @keyframes float { 0%,100%{transform:translate(0,0) scale(1);} 33%{transform:translate(30px,-30px) scale(1.1);} 66%{transform:translate(-20px,20px) scale(0.9);} }
+
+        .container { position: relative; z-index:1; width: 100%; max-width: 450px; padding: 20px; }
+        .login-card{
+background:#1C1C1C;
+border-top:5px solid #E66B19;
+border-radius:20px;
+padding:35px;
+box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+        @keyframes slideUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+
+        .logo { text-align:center; margin-bottom:32px; animation: fadeIn 0.8s ease-out 0.2s both; }
+        .logo h1 { color:#32D583; font-size:36px; font-weight:700; margin-bottom:8px; }
+        .logo p { color: rgba(255,255,255,0.7); font-size:14px; }
+
+
+        .tabs { display:flex; gap:12px; margin-bottom:32px; }
+        .tab-btn { flex:1; padding:14px; border:2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6); border-radius:12px; cursor:pointer; font-size:15px; font-weight:500; transition: all 0.3s; text-align:center; }
+       .tab-btn.active{
+background:#E66B19;
+border-color:#E66B19;
+color:white;
+}
+
+        .form-container { display: none; animation: fadeIn 0.8s ease-out both; }
+        .form-container.active { display: block; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display:block; color: rgba(255,255,255,0.9); font-size:14px; font-weight:500; margin-bottom:8px; }
+        .form-group input { width:100%; padding:14px 16px; background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:#fff; font-size:15px; outline:none; }
+        .form-group input:focus { background: rgba(255,255,255,0.08); border-color:#32D583; box-shadow:0 0 0 3px rgba(50,213,131,0.1); }
+
+        .login-btn { width:100%; padding:16px; background: #E66B19; border:none; border-radius:12px; color:#141B29; font-size:16px; font-weight:600; cursor:pointer; transition: all 0.3s ease; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow:0 8px 20px #E66B19; }
+
+        .flash-msg { margin-bottom: 15px; padding:10px; border-radius:8px; font-weight:500; text-align:center; }
+        .flash-danger { background: rgba(255,0,0,0.7); color:white; }
+        .flash-success { background: rgba(0,255,0,0.7); color:black; }
+
+        @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+        a{
+        text-decoration:none;
+        }
+        #forgot{
+        color:white;
+        }
+        #not{
+        color:white;
+        }
+        #sin{
+        color:#E66B19;
+        }
+        #or{
+        color:white;
+        }
+        #pass{
+        position:relative;
+        }
+        \.logo-box{
+text-align:center;
+background:#fff;
+padding:20px;
+border-radius:15px;
+margin-bottom:25px;
+}
+
+.logo-box img{
+width:130px;
+height:auto;
+object-fit:contain;
+}
+
+.logo-box h2{
+margin-top:10px;
+color:#E66B19;
+font-size:24px;
+font-weight:700;
+}
+
+.logo-box p{
+color:#666;
+font-size:14px;
+}
+
+#pass{
+    position:relative;
+}
+
+.eye{
+    position:absolute;
+    right:15px;
+    top:42px;
+    color:white;
+    cursor:pointer;
+}
+        /* ================= MOBILE ================= */
+
+@media screen and (max-width:768px){
+
+.container{
+    padding:15px;
+}
+
+.login-card{
+    padding:25px 20px;
+    border-radius:15px;
+}
+
+.logo-box{
+    padding:15px;
+}
+
+.logo-box img{
+    width:100px;
+}
+
+.logo-box h2{
+    font-size:20px;
+}
+
+.logo-box p{
+    font-size:12px;
+}
+
+.tabs{
+    flex-direction:column;
+    gap:8px;
+}
+
+.tab-btn{
+    width:100%;
+    font-size:14px;
+}
+
+.form-group label{
+    font-size:13px;
+}
+
+.form-group input{
+    padding:12px;
+    font-size:14px;
+}
+
+.login-btn{
+    padding:14px;
+    font-size:15px;
+}
+
+.eye{
+    right:15px !important;
+    margin-left:0 !important;
+}
+
+}
+
+/* ================= SMALL MOBILE ================= */
+
+@media screen and (max-width:480px){
+
+.container{
+    max-width:100%;
+    padding:10px;
+}
+
+.login-card{
+    padding:20px 15px;
+}
+
+.logo-box img{
+    width:80px;
+}
+
+.logo-box h2{
+    font-size:18px;
+}
+
+.logo-box p{
+    font-size:11px;
+}
+
+.form-group input{
+    padding:10px;
+    font-size:13px;
+}
+
+.login-btn{
+    padding:12px;
+    font-size:14px;
+}
+
+}
+
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <div class="container">
+        <div class="login-card">
+            <div class="logo-box" >
+
+    <img src="{{ url_for('static', filename='indian_logo.png') }}"
+         alt="Logo" style="margin-left:100px;">
+
+    <h2 style="margin-left:60px;">Indian Electronics</h2>
+
+    <p style="margin-left:80px;">Inventory & Billing System</p>
+
+</div>
+            <br>
+
+
+            <div class="tabs">
+                <button class="tab-btn active" data-target="studentForm">👨‍🎓 Admin</button>
+                <button class="tab-btn" data-target="staffForm">💼 Employee</button>
+            </div>
+
+
+            <div id="studentForm" class="form-container active">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+                {% if 'student' in category %}
+          <p style="color: {% if category == 'danger' %}red{% elif category == 'success' %}green{% else %}red{% endif %};">{{ message }}</p>
+        {% endif %}
+                {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+
+                <form method="POST" action="{{ url_for('admin_login') }}">
+                    <input type="hidden" name="input_type" value="student">
+                    <div class="form-group">
+                        <label for="studentEmail">Register Number</label>
+                        <input type="text" id="studentEmail" placeholder="Enter register number" name="username" required>
+                    </div>
+                    <div id="pass">
+                    <div  class="form-group">
+                        <label for="studentPassword">Password</label>
+                        <input type="password" id="studentPassword" placeholder="Enter password" name="password" required>
+
+                    </div>
+                        <div>
+                        <i class="fa-solid fa-eye eye" onclick="togglePassword(this)" ></i>
+                            </div>
+                   </div>
+                    <a><p id="forgot">Forgot password?</p></a>
+
+
+                    <button type="submit" class="login-btn">Login as Admin</button><br><br>
+
+
+                </form>
+            </div>
+
+
+            <div id="staffForm" class="form-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+                {% if 'staff' in category %}
+          <p style="color: {% if category == 'danger' %}red{% elif category == 'success' %}green{% else %}red{% endif %};">{{ message }}</p>
+        {% endif %}
+                {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+
+                <form method="POST" action="{{ url_for('emp_login') }}">
+                    <input type="hidden" name="input_type" value="staff">
+                    <div class="form-group">
+                        <label for="staffEmail">Staff Email</label>
+                        <input type="text" id="staffEmail" placeholder="Enter staff email" name="tusername" required>
+                    </div>
+                    <div id="pass">
+                    <div class="form-group">
+                        <label for="staffPassword">Password</label>
+                        <input type="password" id="staffPassword" placeholder="Enter password" name="tpassword" required>
+
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-eye eye" onclick="togglePasswordd(this)" style="color:white;position:absolute;margin-top:-45px;margin-left:290px;"></i>
+                            </div>
+                        </div>
+                    <button type="submit" class="login-btn">Login as Staff</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const forms = document.querySelectorAll('.form-container');
+
+  function togglePassword(icon){
+  let pass = document.getElementById("studentPassword");
+
+  if(pass.type === "password"){
+    pass.type = "text";
+    icon.classList.replace("fa-eye","fa-eye-slash");
+  } else {
+    pass.type = "password";
+    icon.classList.replace("fa-eye-slash","fa-eye");
+  }
+
+}
+function togglePasswordd(icon){
+
+  let pass1=document.getElementById("staffPassword");
+
+  if(pass1.type === "password"){
+    pass1.type = "text";
+    icon.classList.replace("fa-eye","fa-eye-slash");
+  } else {
+    pass1.type = "password";
+    icon.classList.replace("fa-eye-slash","fa-eye");
+  }
+
+}
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      forms.forEach(f => f.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+
+
+  {% if active_form == 'staff' %}
+      document.querySelector('.tab-btn[data-target="staffForm"]').classList.add('active');
+      document.querySelector('.tab-btn[data-target="studentForm"]').classList.remove('active');
+      document.getElementById('studentForm').classList.remove('active');
+      document.getElementById('staffForm').classList.add('active');
+  {% else %}
+      document.querySelector('.tab-btn[data-target="studentForm"]').classList.add('active');
+      document.querySelector('.tab-btn[data-target="staffForm"]').classList.remove('active');
+      document.getElementById('studentForm').classList.add('active');
+      document.getElementById('staffForm').classList.remove('active');
+  {% endif %}
+</script>
+</body>
+</html>

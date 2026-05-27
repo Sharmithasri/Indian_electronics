@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suppliers</title>
+
+<style>
+
+:root{
+--main:#E66B19;
+--dark:#1c1c1c;
+--light:#f4f4f4;
+--card:#ffffff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+display:flex;
+background:var(--light);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+height:100vh;
+background:var(--dark);
+color:white;
+padding:20px;
+position:fixed;
+}
+
+.logo{
+font-size:18px;
+font-weight:bold;
+margin-bottom:30px;
+}
+
+.menu{
+list-style:none;
+}
+
+.menu li{
+padding:12px;
+margin:6px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.menu li:hover,
+.active{
+background:var(--main);
+}
+
+/* MAIN */
+
+.main{
+margin-left:240px;
+padding:20px;
+width:100%;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.search{
+padding:10px;
+width:300px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* TITLE */
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.btn{
+background:var(--main);
+color:white;
+padding:10px 15px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* TABLE */
+
+.table-box{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+th{
+background:#fafafa;
+}
+
+/* TAGS */
+
+.tag{
+display:inline-block;
+padding:5px 10px;
+background:#eee;
+border-radius:20px;
+font-size:12px;
+margin-right:5px;
+}
+a{
+    text-decoration:none;
+    color:white;
+    }
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+font-size:16px;
+}
+
+.logo img{
+width:180px;   /* small logo */
+height:90px;
+object-fit:contain;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">⚡ Indian Electronics</div>
+
+<ul class="menu">
+<a href="{{url_for('home')}}"> <li >Dashboard</li></a>
+<a href="{{url_for('product')}}"><li>Products</li></a>
+    <a href="{{url_for('billing')}}"><li>Billing / POS</li></a>
+    <a href="{{url_for('sales')}}"><li>Sales</li></a>
+    <a href="{{url_for('low_stock')}}"><li>Low Stock</li></a>
+    <a href="{{url_for('customers')}}"><li>Customers</li></a>
+    <a href="{{url_for('mechanics')}}"><li>Mechanics</li></a>
+    <a href="{{url_for('suppliers')}}"><li style="background:#E66B19">Suppliers</li></a>
+    <a href="{{url_for('purchase')}}"><li>Purchases</li></a>
+    <a href="{{url_for('reports')}}"><li>Reports</li></a>
+</ul>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="header">
+<input class="search" placeholder="Search products, customers, bills">
+<div>🔔 SK</div>
+</div>
+
+<div class="top">
+<div>
+<h2>Suppliers</h2>
+<p>4 registered suppliers</p>
+</div>
+
+<button class="btn">+ Add Supplier</button>
+</div>
+
+<!-- TABLE -->
+
+<div class="table-box">
+
+<table>
+
+<thead>
+<tr>
+<th>Supplier</th>
+<th>Contact</th>
+<th>Address</th>
+<th>Products Supplied</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>Havells India Ltd</td>
+<td>1800-11-0303</td>
+<td>Noida, UP</td>
+<td>
+<span class="tag">MCB</span>
+<span class="tag">RCCB</span>
+<span class="tag">Switches</span>
+</td>
+</tr>
+
+<tr>
+<td>Polycab Wires</td>
+<td>1800-266-0541</td>
+<td>Mumbai, MH</td>
+<td>
+<span class="tag">Wires</span>
+<span class="tag">Cables</span>
+</td>
+</tr>
+
+<tr>
+<td>Philips Lighting India</td>
+<td>1800-102-2929</td>
+<td>Gurugram, HR</td>
+<td>
+<span class="tag">LED Bulbs</span>
+<span class="tag">Tube Lights</span>
+</td>
+</tr>
+
+<tr>
+<td>Crompton Greaves</td>
+<td>1800-599-1234</td>
+<td>Mumbai, MH</td>
+<td>
+<span class="tag">Fans</span>
+<span class="tag">Motors</span>
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>

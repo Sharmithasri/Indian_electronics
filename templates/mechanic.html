@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mechanics</title>
+<link rel="icon" type="image/x-icon" href="static/Indian_logo.png">
+<style>
+
+:root{
+--main:#E66B19;
+--dark:#1c1c1c;
+--light:#f4f4f4;
+--card:#ffffff;
+--danger:#e53935;
+--success:#2e7d32;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+display:flex;
+background:var(--light);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+height:100vh;
+background:var(--dark);
+color:white;
+padding:20px;
+position:fixed;
+}
+
+.logo{
+font-size:18px;
+font-weight:bold;
+margin-bottom:30px;
+}
+
+.menu{
+list-style:none;
+}
+
+.menu li{
+padding:12px;
+margin:6px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.menu li:hover,
+.active{
+background:var(--main);
+}
+
+/* MAIN */
+
+.main{
+margin-left:240px;
+padding:20px;
+width:100%;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.search{
+padding:10px;
+width:300px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* TITLE */
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.btn{
+background:var(--main);
+color:white;
+padding:10px 15px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* SEARCH */
+
+.search-box{
+margin-bottom:15px;
+}
+
+.search-box input{
+width:350px;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* TABLE */
+
+.table-box{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+th{
+background:#fafafa;
+}
+
+/* STATUS */
+
+.status{
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+.clear{
+background:#e8f5e9;
+color:var(--success);
+}
+
+.due{
+background:#fdecea;
+color:var(--danger);
+}
+
+/* CREDIT COLOR */
+
+.credit{
+font-weight:bold;
+color:var(--main);
+}
+
+.zero{
+color:var(--success);
+font-weight:bold;
+}
+a{
+    text-decoration:none;
+    color:white;
+    }
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+font-size:16px;
+}
+
+.logo img{
+width:180px;   /* small logo */
+height:90px;
+object-fit:contain;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+  <img src="{{ url_for('static', filename='indian_logo.png') }}" alt="Logo">
+
+</div>
+<ul class="menu">
+<a href="{{url_for('home')}}"> <li >Dashboard</li></a>
+<a href="{{url_for('product')}}"><li>Products</li></a>
+    <a href="{{url_for('billing')}}"><li>Billing / POS</li></a>
+    <a href="{{url_for('sales')}}"><li>Sales</li></a>
+    <a href="{{url_for('low_stock')}}"><li>Low Stock</li></a>
+    <a href="{{url_for('customers')}}"><li>Customers</li></a>
+
+    <a href="{{url_for('reports')}}"><li>Reports</li></a>
+</ul>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="header">
+<input class="search" placeholder="Search products, customers, bills">
+<div>🔔 SK</div>
+</div>
+
+<div class="top">
+<div>
+<h2>Mechanics</h2>
+<p>Manage mechanic accounts and pricing</p>
+</div>
+
+<button class="btn">+ Add Mechanic</button>
+</div>
+
+<!-- SEARCH -->
+
+<div class="search-box">
+<input type="text" id="searchMechanic" placeholder="Search mechanic...">
+</div>
+
+<!-- TABLE -->
+
+<div class="table-box">
+
+<table id="mechanicTable">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Total Purchases</th>
+<th>Credit Balance</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>Ramesh Electricals</td>
+<td>9988776655</td>
+<td>₹156,000</td>
+<td class="credit">₹3,400</td>
+<td><span class="status due">Credit Due</span></td>
+</tr>
+
+<tr>
+<td>Suresh Wiring Works</td>
+<td>9988776656</td>
+<td>₹234,000</td>
+<td class="zero">₹0</td>
+<td><span class="status clear">Clear</span></td>
+</tr>
+
+<tr>
+<td>Mohan Electric Service</td>
+<td>9988776657</td>
+<td>₹89,000</td>
+<td class="credit">₹8,500</td>
+<td><span class="status due">Credit Due</span></td>
+</tr>
+
+<tr>
+<td>Kiran Electricals</td>
+<td>9988776658</td>
+<td>₹178,000</td>
+<td class="credit">₹1,200</td>
+<td><span class="status due">Credit Due</span></td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+/* SEARCH */
+
+document.getElementById("searchMechanic").addEventListener("keyup",function(){
+
+let value=this.value.toLowerCase()
+let rows=document.querySelectorAll("#mechanicTable tbody tr")
+
+rows.forEach(row=>{
+let text=row.innerText.toLowerCase()
+row.style.display=text.includes(value) ? "" : "none"
+})
+
+})
+
+</script>
+
+</body>
+</html>

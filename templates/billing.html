@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Billing POS</title>
+<script src="https://kit.fontawesome.com/054b5b27d5.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="static/Indian_logo.png">
+<style>
+
+a{
+text-decoration:none;
+color:white;
+}
+:root{
+--main:#E66B19;
+--dark:#0f172a;
+--bg:#f5f6f8;
+--card:#ffffff;
+--text:#333;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+display:flex;
+background:var(--bg);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+height:100vh;
+background:var(--dark);
+color:white;
+padding:20px;
+position:fixed;
+}
+
+.logo{
+font-weight:bold;
+margin-bottom:30px;
+}
+
+.menu li{
+list-style:none;
+padding:12px;
+margin:6px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.menu li:hover,
+.active{
+background:var(--main);
+}
+
+/* MAIN */
+
+.main{
+margin-left:240px;
+padding:20px;
+width:100%;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+}
+
+.search{
+width:350px;
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+/* 🔥 FILTERS */
+
+.filters{
+display:flex;
+gap:10px;
+margin-bottom:15px;
+}
+
+.filters select{
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* 🔥 LAYOUT */
+
+.container{
+display:grid;
+grid-template-columns:1fr 1.6fr;   /* 🔥 Cart bigger */
+gap:20px;
+align-items:start;
+}
+
+/* 🔥 PRODUCTS */
+
+.products{
+display:grid;
+grid-template-columns:repeat(2,1fr); /* 🔥 cleaner grid */
+gap:15px;
+}
+
+.product{
+background:white;
+padding:15px;
+border-radius:12px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+cursor:pointer;
+transition:0.2s;
+}
+
+.product:hover{
+transform:scale(1.03);
+}
+
+.price{
+color:var(--main);
+font-weight:bold;
+}
+
+.brand{
+font-size:12px;
+color:#888;
+}
+
+.stock{
+font-size:12px;
+background:#eee;
+padding:3px 8px;
+border-radius:10px;
+}
+
+/* 🔥 BILLING PANEL */
+
+.cart{
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+
+/* 🔥 MAIN FEATURES */
+height:90vh;
+overflow-y:auto;
+position:sticky;
+top:20px;
+}
+
+/* 🔥 CUSTOMER SECTION */
+
+.cart h3{
+margin-bottom:8px;
+}
+
+/* 🔥 INPUTS */
+
+input,select{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+/* 🔥 UPI BOX */
+
+#upiBox{
+margin-top:5px;
+}
+
+/* 🔥 CART ITEMS */
+
+#cartItems{
+margin-top:10px;
+max-height:250px;
+overflow-y:auto;
+}
+
+.qty{
+display:flex;
+gap:5px;
+margin-top:5px;
+}
+
+.qty button{
+padding:3px 8px;
+}
+
+/* 🔥 TOTAL */
+
+.total{
+margin-top:15px;
+font-size:18px;
+font-weight:bold;
+color:var(--main);
+}
+
+/* 🔥 BUTTON */
+
+button{
+background:var(--main);
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+cursor:pointer;
+margin-top:8px;
+}
+
+/* 🔥 MODALS */
+
+#billModal,
+#editModal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+/* 🔥 SCROLLBAR (SMOOTH LOOK) */
+
+.cart::-webkit-scrollbar{
+width:6px;
+}
+
+.cart::-webkit-scrollbar-thumb{
+background:#ccc;
+border-radius:10px;
+}
+    /* 🔥 CART ITEM CARD */
+.cart-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#f9fafb;
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+box-shadow:0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* LEFT SIDE */
+.cart-info{
+display:flex;
+flex-direction:column;
+}
+
+.cart-title{
+font-weight:600;
+font-size:14px;
+color:#222;
+}
+
+.cart-sub{
+font-size:12px;
+color:#777;
+margin-top:3px;
+}
+
+/* RIGHT SIDE */
+.cart-actions{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+/* BUTTONS */
+.cart-actions button{
+background:#eee;
+color:#333;
+border:none;
+padding:4px 8px;
+border-radius:5px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.cart-actions button:hover{
+background:#ddd;
+}
+
+/* DELETE ICON */
+.cart-actions .delete{
+color:red;
+cursor:pointer;
+font-size:16px;
+margin-left:5px;
+}
+    .fa-cart-arrow-down{
+    color:#E56B19;
+    font-size:20px;
+    padding-left:5px;
+
+    }
+    /* 🔥 MAIN CARD */
+.card-box{
+background:#fff;
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* 🔥 CART BOX */
+.cart-main{
+display:flex;
+flex-direction:column;
+}
+
+/* 🔥 ITEMS SCROLL */
+#cartItems{
+max-height:250px;
+overflow-y:auto;
+margin-bottom:10px;
+}
+
+/* 🔥 SUBTOTAL */
+.subtotal{
+font-size:14px;
+color:#777;
+margin-top:5px;
+}
+
+/* 🔥 TOTAL */
+.total{
+font-size:20px;
+font-weight:bold;
+color:var(--main);
+margin:10px 0;
+}
+
+/* 🔥 BUTTON */
+.gen-btn{
+width:100%;
+padding:12px;
+font-size:16px;
+border-radius:8px;
+background:var(--main);
+color:white;
+border:none;
+cursor:pointer;
+}
+    .logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+font-size:16px;
+}
+
+.logo img{
+width:180px;   /* small logo */
+height:90px;
+object-fit:contain;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+<div class="logo">
+  <img src="{{ url_for('static', filename='indian_logo.png') }}" alt="Logo">
+
+</div>
+<ul class="menu">
+<a href="{{url_for('admin_dashboard')}}"><li>Dashboard</li></a>
+<a href="{{url_for('product')}}"><li>Products</li></a>
+<li class="active">Billing / POS</li>
+<a href="{{url_for('sales')}}"><li>Sales</li></a>
+<a href="{{url_for('low_stock')}}"><li>Low Stock</li></a>
+<a href="{{url_for('customers')}}"><li>Customers</li></a>
+<a href="{{url_for('reports')}}"><li>Reports</li></a>
+</ul>
+</div>
+
+<div class="main">
+
+<div class="header">
+
+
+<input class="search" id="searchBox" placeholder="Search products...">
+<div >🔔 GOWTHAM</div>
+</div>
+<div class="filters">
+<select id="brandFilter" style="width:200px;">
+<option value="all">All Brands</option>
+<option value="havells">Havells</option>
+<option value="anchor">Anchor</option>
+<option value="polycab">Polycab</option>
+<option value="crompton">Crompton</option>
+<option value="philips">Philips</option>
+</select>
+
+<select id="categoryFilter" style="width:200px;">
+<option value="all">All Categories</option>
+<option value="Switches">Switches</option>
+<option value="Wires">Wires</option>
+<option value="Lighting">Lighting</option>
+<option value="Fans">Fans</option>
+</select>
+</div>
+<div class="container">
+
+<div class="products" id="products"></div>
+
+<div class="cart">
+
+  <!-- 🔹 CUSTOMER -->
+  <div class="card-box">
+    <h3>Customer Details</h3>
+
+    <select id="userType">
+      <option value="customer">Customer</option>
+      <option value="mechanic">Mechanic</option>
+    </select>
+
+    <input id="name" placeholder="Name">
+    <input id="phone" placeholder="Mobile Number">
+  </div>
+
+  <!-- 🔹 PAYMENT -->
+  <div class="card-box">
+    <h3>Payment</h3>
+
+    <select id="payment">
+      <option value="cash">Cash</option>
+      <option value="gpay">GPay</option>
+      <option value="phonepe">PhonePe</option>
+    </select>
+
+    <div id="upiBox">
+      <input id="upi" placeholder="UPI ID">
+    </div>
+  </div>
+
+  <!-- 🔥 CART + TOTAL (SINGLE BOX) -->
+  <div class="card-box cart-main">
+
+    <h3>Cart <i class='fa-solid fa-cart-arrow-down'></i>(<span id="cartCount">0</span> items)</h3>
+
+    <div id="cartItems">Add products</div>
+
+    <hr>
+
+    <div class="subtotal">
+      Subtotal: ₹<span id="subtotal">0</span>
+    </div>
+
+    <div class="total">
+      Total: ₹<span id="total">0</span>
+    </div>
+
+    <button onclick="generateBill()" class="gen-btn">
+      Generate Bill
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+<div id="billModal" style="display:none;
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+justify-content:center;align-items:center;z-index:999;">
+
+<div style="width:400px;background:white;border-radius:10px;overflow:hidden">
+
+<div style="background:#E66B19;color:white;padding:15px;text-align:center">
+<h2>Indian Electronics</h2>
+<p>Electrical & Electronics Store</p>
+</div>
+
+<div style="padding:15px" id="billContent"></div>
+
+<div style="padding:10px;text-align:center">
+<button onclick="printBill()">Confirm</button>
+<button onclick="closeBill()">Close</button>
+</div>
+
+</div>
+</div>
+
+<form id="billForm" method="POST" action="/create_bill">
+<input type="hidden" name="name" id="f_name">
+<input type="hidden" name="phone" id="f_phone">
+<input type="hidden" name="payment" id="f_payment">
+<input type="hidden" name="upi" id="f_upi">
+<input type="hidden" name="cart" id="f_cart">
+<input type="hidden" name="total" id="f_total">
+</form>
+<div id="editModal" style="display:none;
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+justify-content:center;align-items:center;z-index:999;">
+
+<div style="width:300px;background:white;border-radius:10px;padding:20px;text-align:center">
+
+<h3>Edit Price</h3>
+
+<input id="editPriceInput" type="number" placeholder="Enter new price" style="margin:10px 0">
+
+<br>
+
+<button onclick="savePrice()">Save</button>
+<button onclick="closeEdit()">Cancel</button>
+
+</div>
+</div>
+<div id="customAlert" style="
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.4);
+justify-content:center;
+align-items:center;
+z-index:999;
+">
+
+<div style="
+background:white;
+padding:20px;
+border-radius:10px;
+width:300px;
+text-align:center;
+">
+
+<p id="alertMsg"></p>
+
+<button onclick="closeAlert()" style="
+margin-top:10px;
+background:#E66B19;
+color:white;
+border:none;
+padding:6px 12px;
+border-radius:5px;
+cursor:pointer;
+">OK</button>
+
+</div>
+</div>
+<script>
+
+/* 🔥 DATA */
+const products = {{ products | tojson }};
+let cart = [];
+let filteredProducts = [...products];
+let userType = "customer";
+let currentEditId = null;
+/* 🔥 UPI */
+const upiBox = document.getElementById("upiBox");
+upiBox.style.display = "none";
+
+document.getElementById("payment").addEventListener("change", function(){
+  upiBox.style.display = (this.value === "cash") ? "none" : "block";
+});
+
+/* 🔥 USER TYPE */
+document.getElementById("userType").addEventListener("change", function(){
+  userType = this.value;
+  renderProducts(filteredProducts);
+  renderCart();
+});
+
+/* 🔥 RENDER PRODUCTS */
+function renderProducts(list){
+  let div = document.getElementById("products");
+  div.innerHTML = "";
+
+  list.forEach(p => {
+
+    let price = (userType === "mechanic") ? p.mechanic_price : p.selling_price;
+
+    div.innerHTML += `
+    <div class="product" onclick="addToCart(${p.product_id})">
+      <h4>${p.name}</h4>
+      <div class="brand">${p.brand}</div>
+      <div class="price">₹${price}</div>
+      <div class="stock">${p.stock} left</div>
+    </div>
+    `;
+  });
+}
+renderProducts(products);
+
+/* 🔥 SEARCH */
+document.getElementById("searchBox").addEventListener("keyup", function(){
+
+  let val = this.value.toLowerCase().trim();
+
+  let words = val.split(" ");   // 🔥 split words
+
+  let result = filteredProducts.filter(p => {
+
+    let text = (p.name + " " + p.brand + " " + p.category).toLowerCase();
+
+    return words.every(word => text.includes(word));  // 🔥 match all words
+
+  });
+
+  renderProducts(result);
+});
+/* 🔥 FILTER */
+document.getElementById("brandFilter").addEventListener("change", applyFilter);
+document.getElementById("categoryFilter").addEventListener("change", applyFilter);
+
+function applyFilter(){
+  let brand = document.getElementById("brandFilter").value.toLowerCase();
+  let category = document.getElementById("categoryFilter").value;
+
+  filteredProducts = products.filter(p => {
+    let b = (brand === "all" || p.brand.toLowerCase().includes(brand));
+    let c = (category === "all" || p.category === category);
+    return b && c;
+  });
+
+  renderProducts(filteredProducts);
+}
+
+/* 🔥 ADD TO CART */
+function addToCart(id){
+
+  let p = products.find(x => x.product_id === id);
+
+  if(p.stock <= 0){
+    showAlert("Out of stock ❌");
+    return;
+  }
+
+  p.stock--;
+
+  let item = cart.find(x => x.id === id);
+
+  if(item){
+    item.qty++;
+  }else{
+    cart.push({id:id, qty:1, customPrice:null});
+  }
+
+  renderProducts(filteredProducts);
+  renderCart();
+}
+
+/* 🔥 CART */
+function renderCart(){
+
+  let div = document.getElementById("cartItems");
+  div.innerHTML = "";
+
+  let total = 0;
+  let totalItems = 0;   // 🔥 NEW
+
+  cart.forEach(item => {
+
+    let p = products.find(x => x.product_id === item.id);
+
+    let basePrice = (userType === "mechanic") ? p.mechanic_price : p.selling_price;
+    let price = item.customPrice ? item.customPrice : basePrice;
+
+    total += price * item.qty;
+    totalItems += item.qty;   // 🔥 ADD THIS
+
+    div.innerHTML += `
+    <div class="cart-item">
+
+      <div class="cart-info">
+        <div class="cart-title">${p.name}</div>
+        <div class="cart-sub">₹${price} × ${item.qty} = ₹${price * item.qty}</div>
+      </div>
+
+      <div class="cart-actions">
+        <button onclick="changeQty(${item.id},-1)">−</button>
+        <span>${item.qty}</span>
+        <button onclick="changeQty(${item.id},1)">+</button>
+      </div>
+
+    </div>
+    `;
+  });
+
+  document.getElementById("total").innerText = total;
+
+  // 🔥 THIS IS THE ONLY IMPORTANT CHANGE
+  document.getElementById("cartCount").innerText = totalItems;
+
+  if(cart.length === 0){
+    div.innerHTML = "Add products";
+  }
+}
+/* 🔥 EDIT PRICE */
+function editPrice(id){
+
+  currentEditId = id;
+
+  let item = cart.find(x => x.id === id);
+  let p = products.find(x => x.product_id === id);
+
+  let basePrice = (userType === "mechanic") ? p.mechanic_price : p.selling_price;
+
+  document.getElementById("editPriceInput").value = item.customPrice || basePrice;
+
+  document.getElementById("editModal").style.display = "flex";
+}
+function savePrice(){
+
+  let value = document.getElementById("editPriceInput").value;
+
+  let newPrice = parseFloat(value);
+
+  if(isNaN(newPrice) || newPrice <= 0){
+    alert("Invalid price ❌");
+    return;
+  }
+
+  let item = cart.find(x => x.id === currentEditId);
+
+  item.customPrice = newPrice;
+
+  closeEdit();
+  renderCart();
+}
+function closeEdit(){
+  document.getElementById("editModal").style.display = "none";
+}
+/* 🔥 CHANGE QTY */
+function changeQty(id,val){
+
+  let item = cart.find(x => x.id === id);
+  let p = products.find(x => x.product_id === id);
+
+  item.qty += val;
+
+  if(val === -1){ p.stock++; }
+
+  if(item.qty <= 0){
+    cart = cart.filter(x => x.id !== id);
+  }
+
+  renderProducts(filteredProducts);
+  renderCart();
+}
+
+/* 🔥 GENERATE BILL */
+function generateBill(){
+
+let name = document.getElementById("name").value;
+let phone = document.getElementById("phone").value;
+
+if(cart.length === 0){
+alert("Cart empty ❌");
+return;
+}
+
+
+let total = 0;
+let rows = "";
+
+/* CUSTOMER */
+rows += `
+<p><b>Name:</b> ${name}</p>
+<p><b>Phone:</b> ${phone}</p>
+<hr>
+`;
+
+/* ITEMS */
+cart.forEach((item,i)=>{
+let p = products.find(x => x.product_id === item.id);
+
+let basePrice = (userType==="mechanic") ? p.mechanic_price : p.selling_price;
+let price = item.customPrice ? item.customPrice : basePrice;
+
+let amt = price * item.qty;
+total += amt;
+
+rows += `<p>${i+1}. ${p.name} x${item.qty} = ₹${amt}</p>`;
+});
+
+rows += `<hr><h3>Total: ₹${total}</h3>`;
+
+document.getElementById("billContent").innerHTML = rows;
+document.getElementById("billModal").style.display = "flex";
+}
+
+/* 🔥 CONFIRM BILL */
+function submitBill(){
+
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let payment = document.getElementById("payment").value;
+  let total = document.getElementById("total").innerText;
+
+  let items = "";
+
+  cart.forEach((item,i)=>{
+    let p = products.find(x => x.product_id === item.id);
+
+    let basePrice = (userType==="mechanic") ? p.mechanic_price : p.selling_price;
+    let price = item.customPrice ? item.customPrice : basePrice;
+
+    items += `${i+1}. ${p.name} x${item.qty} = ₹${price*item.qty}\n`;
+  });
+
+  localStorage.setItem("billData", JSON.stringify({
+    name, phone, payment, items, total
+  }));
+
+  document.getElementById("f_name").value = name;
+  document.getElementById("f_phone").value = phone;
+  document.getElementById("f_payment").value = payment;
+  document.getElementById("f_upi").value = document.getElementById("upi").value;
+  document.getElementById("f_cart").value = JSON.stringify(cart);
+  document.getElementById("f_total").value = total;
+
+  document.getElementById("billForm").submit();
+}
+
+/* 🔥 CLOSE */
+function closeBill(){
+  document.getElementById("billModal").style.display = "none";
+}
+
+/* 🔥 PRINT */
+function printBill(){
+
+let data = JSON.parse(localStorage.getItem("billData"));
+
+if(!data) return;
+
+let billNo = "INV" + Date.now();
+
+let now = new Date().toLocaleString();
+
+let win = window.open("", "", "width=800,height=700");
+
+win.document.write(`
+<html>
+<head>
+<title>Invoice</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+padding:20px;
+}
+
+.header{
+text-align:center;
+border-bottom:2px solid #E66B19;
+padding-bottom:10px;
+}
+
+.logo{
+width:80px;
+height:80px;
+}
+
+.shop{
+font-size:26px;
+font-weight:bold;
+color:#E66B19;
+}
+
+.info{
+margin-top:15px;
+display:flex;
+justify-content:space-between;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:8px;
+text-align:left;
+}
+
+th{
+background:#E66B19;
+color:white;
+}
+
+.total{
+text-align:right;
+font-size:22px;
+font-weight:bold;
+margin-top:20px;
+color:#E66B19;
+}
+
+.footer{
+margin-top:30px;
+text-align:center;
+font-size:14px;
+color:#666;
+border-top:1px solid #ddd;
+padding-top:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<img src="/static/indian_logo.png" class="logo">
+
+<div class="shop">
+Indian Electronics
+</div>
+
+<div>
+Electrical & Electronics Store
+</div>
+
+</div>
+
+<div class="info">
+
+<div>
+<b>Bill No:</b> ${billNo}<br>
+<b>Date:</b> ${now}
+</div>
+
+<div>
+<b>Customer:</b> ${data.name || "Walk-in"}<br>
+<b>Phone:</b> ${data.phone || "-"}
+</div>
+
+</div>
+
+<table>
+
+<tr>
+<th>Item Details</th>
+</tr>
+
+<tr>
+<td>
+<pre style="font-family:Arial;border:none;">
+${data.items}
+</pre>
+</td>
+</tr>
+
+</table>
+
+<div class="total">
+Total : ₹${data.total}
+</div>
+
+<div class="footer">
+
+Thank you for shopping with us ❤️
+
+<br><br>
+
+Follow us on Instagram
+
+<br>
+
+Rate us on Google ⭐⭐⭐⭐⭐
+
+</div>
+
+</body>
+</html>
+`);
+
+win.document.close();
+
+setTimeout(()=>{
+win.print();
+win.close();
+},500);
+
+}
+    function showAlert(msg){
+  document.getElementById("alertMsg").innerText = msg;
+  document.getElementById("customAlert").style.display = "flex";
+}
+
+function closeAlert(){
+  document.getElementById("customAlert").style.display = "none";
+}
+</script>
+
+</body>
+</html>

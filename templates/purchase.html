@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Purchase Management</title>
+
+<style>
+
+:root{
+--main:#E66B19;
+--dark:#1c1c1c;
+--light:#f4f4f4;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
+
+body{display:flex;background:var(--light);}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;height:100vh;background:var(--dark);
+color:white;padding:20px;position:fixed;
+}
+
+.menu li{
+list-style:none;padding:12px;margin:6px 0;
+border-radius:6px;cursor:pointer;
+}
+
+.menu li:hover,.active{background:var(--main);}
+
+/* MAIN */
+
+.main{margin-left:240px;padding:20px;width:100%;}
+
+/* HEADER */
+
+.header{
+display:flex;justify-content:space-between;
+margin-bottom:20px;
+}
+
+.search{
+padding:10px;width:300px;border-radius:6px;border:1px solid #ccc;
+}
+
+/* TOP */
+
+.top{
+display:flex;justify-content:space-between;align-items:center;
+margin-bottom:20px;
+}
+
+.btn{
+background:var(--main);color:white;
+padding:10px 15px;border:none;border-radius:6px;cursor:pointer;
+}
+
+/* TABLE */
+
+.table-box{
+background:white;padding:20px;border-radius:10px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+}
+
+table{width:100%;border-collapse:collapse;}
+
+th,td{
+padding:12px;border-bottom:1px solid #eee;text-align:left;
+}
+
+th{background:#fafafa;}
+
+/* FORM MODAL */
+
+.modal{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.5);
+display:none;justify-content:center;align-items:center;
+}
+
+.modal-content{
+background:white;padding:20px;border-radius:10px;width:400px;
+}
+
+.modal input, .modal select{
+width:100%;padding:10px;margin:10px 0;
+border:1px solid #ccc;border-radius:6px;
+}
+a{
+    text-decoration:none;
+    color:white;
+    }
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+font-size:16px;
+}
+
+.logo img{
+width:180px;   /* small logo */
+height:90px;
+object-fit:contain;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+<div class="logo">
+  <img src="{{ url_for('static', filename='indian_logo.png') }}" alt="Logo">
+
+</div>
+<ul class="menu">
+<a href="{{url_for('home')}}"> <li >Dashboard</li></a>
+<a href="{{url_for('product')}}"><li>Products</li></a>
+    <a href="{{url_for('billing')}}"><li>Billing / POS</li></a>
+    <a href="{{url_for('sales')}}"><li>Sales</li></a>
+    <a href="{{url_for('low_stock')}}"><li>Low Stock</li></a>
+    <a href="{{url_for('customers')}}"><li>Customers</li></a>
+    <a href="{{url_for('mechanics')}}"><li>Mechanics</li></a>
+    <a href="{{url_for('suppliers')}}"><li>Suppliers</li></a>
+    <a href="{{url_for('purchase')}}"><li style="background:#E66B19">Purchases</li></a>
+    <a href="{{url_for('reports')}}"><li>Reports</li></a>
+</ul>
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="header">
+<input class="search" placeholder="Search...">
+<div>🔔 SK</div>
+</div>
+
+<div class="top">
+<div>
+<h2>Purchase Management</h2>
+<p>Track stock purchases from suppliers</p>
+</div>
+
+<button class="btn" onclick="openModal()">+ New Purchase</button>
+</div>
+
+<!-- TABLE -->
+
+<div class="table-box">
+
+<table id="purchaseTable">
+
+<thead>
+<tr>
+<th>Date</th>
+<th>Supplier</th>
+<th>Product</th>
+<th>Quantity</th>
+<th>Amount</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2026-03-10</td>
+<td>Havells India Ltd</td>
+<td>Havells MCB 16A</td>
+<td>50</td>
+<td>₹6000</td>
+</tr>
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- MODAL FORM -->
+
+<div class="modal" id="modal">
+
+<div class="modal-content">
+
+<h3>Add Purchase</h3>
+
+<input id="supplier" placeholder="Supplier">
+<input id="product" placeholder="Product">
+<input id="qty" type="number" placeholder="Quantity">
+<input id="price" type="number" placeholder="Price">
+<input id="date" type="date">
+
+<button class="btn" onclick="addPurchase()">Add Purchase</button>
+
+</div>
+
+</div>
+
+<script>
+
+function openModal(){
+document.getElementById("modal").style.display="flex"
+}
+function addPurchase(){
+
+let supplier=document.getElementById("supplier").value
+let product=document.getElementById("product").value
+let qty=document.getElementById("qty").value
+let price=document.getElementById("price").value
+let date=document.getElementById("date").value
+
+// validation (IMPORTANT)
+if(!supplier || !product || !qty || !price || !date){
+alert("Please fill all fields")
+return
+}
+
+let amount=qty*price
+
+let table=document.getElementById("purchaseTable").querySelector("tbody")
+
+table.innerHTML+=`
+<tr>
+<td>${date}</td>
+<td>${supplier}</td>
+<td>${product}</td>
+<td>${qty}</td>
+<td>₹${amount}</td>
+</tr>
+`
+
+// CLEAR FORM
+document.getElementById("supplier").value=""
+document.getElementById("product").value=""
+document.getElementById("qty").value=""
+document.getElementById("price").value=""
+document.getElementById("date").value=""
+
+// CLOSE MODAL
+document.getElementById("modal").style.display="none"
+
+}
+    window.onclick = function(event){
+let modal=document.getElementById("modal")
+if(event.target === modal){
+modal.style.display="none"
+}
+}
+
+</script>
+
+</body>
+</html>

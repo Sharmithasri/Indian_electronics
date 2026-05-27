@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Low Stock Alerts</title>
+<link rel="icon" type="image/x-icon" href="static/Indian_logo.png">
+<style>
+
+:root{
+--main:#E66B19;
+--dark:#1c1c1c;
+--light:#f4f4f4;
+--card:#ffffff;
+--danger:#e53935;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+display:flex;
+background:var(--light);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+height:100vh;
+background:var(--dark);
+color:white;
+padding:20px;
+position:fixed;
+}
+
+.logo{
+font-size:18px;
+font-weight:bold;
+margin-bottom:30px;
+}
+
+.menu{
+list-style:none;
+}
+
+.menu li{
+padding:12px;
+margin:6px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.menu li:hover,
+.active{
+background:var(--main);
+}
+
+/* MAIN */
+
+.main{
+margin-left:240px;
+padding:20px;
+width:100%;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.search{
+padding:10px;
+width:300px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* TITLE */
+
+.title-box{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:20px;
+}
+
+.alert-icon{
+background:#ffe5e0;
+color:var(--danger);
+padding:8px;
+border-radius:8px;
+font-weight:bold;
+}
+
+/* TABLE */
+
+.table-box{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+th{
+background:#fafafa;
+}
+
+/* LOW STOCK ROW */
+
+.low{
+background:#fff3f3;
+}
+
+.stock{
+color:var(--danger);
+font-weight:bold;
+}
+
+/* STATUS */
+
+.status{
+background:var(--danger);
+color:white;
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+}
+a{
+    text-decoration:none;
+    color:white;
+    }
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+font-size:16px;
+}
+
+.logo img{
+width:180px;   /* small logo */
+height:90px;
+object-fit:contain;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+  <img src="{{ url_for('static', filename='indian_logo.png') }}" alt="Logo">
+
+</div>
+
+<ul class="menu">
+<a href="{{url_for('admin_dashboard')}}"> <li >Dashboard</li></a>
+<a href="{{url_for('product')}}"><li>Products</li></a>
+    <a href="{{url_for('billing')}}"><li>Billing / POS</li></a>
+    <a href="{{url_for('sales')}}"><li>Sales</li></a>
+    <a href="{{url_for('low_stock')}}"><li style="background:#E66B19">Low Stock</li></a>
+    <a href="{{url_for('customers')}}"><li>Customers</li></a>
+
+    <a href="{{url_for('reports')}}"><li>Reports</li></a>
+</ul>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="header">
+
+<div style="margin-left:950px;">🔔 GOWTHAM</div>
+
+</div>
+
+<div class="title-box">
+<div class="alert-icon">⚠</div>
+<div>
+<h2>Low Stock Alerts</h2>
+<p>{{l}} products need restocking</p>
+</div>
+</div>
+
+<!-- TABLE -->
+
+<div class="table-box">
+
+<table>
+
+<thead>
+<tr>
+<th>Product</th>
+<th>Brand</th>
+<th>Stock Left</th>
+<th>Min Level</th>
+<th>Status</th>
+</tr>
+</thead>
+
+
+<tbody>
+
+{% for p in min_stock %}
+<tr>
+<td>{{ p['name'] }}</td>  <!-- name -->
+<td>{{ p['brand'] }}</td>  <!-- brand -->
+
+<td>{{ p['stock'] }}</td><!-- stock -->
+    <td>{{p['min_stock']}}</td>
+<td><span class="status">Low Stock</span></td>
+
+</tr>
+{% endfor %}
+
+</tbody>
+
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>

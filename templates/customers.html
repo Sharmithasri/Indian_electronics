@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customers</title>
+<link rel="icon" type="image/x-icon" href="static/Indian_logo.png">
+<style>
+
+:root{
+--main:#E66B19;
+--dark:#1c1c1c;
+--light:#f4f4f4;
+--card:#ffffff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+display:flex;
+background:var(--light);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:240px;
+height:100vh;
+background:var(--dark);
+color:white;
+padding:20px;
+position:fixed;
+}
+
+.logo{
+font-size:18px;
+font-weight:bold;
+margin-bottom:30px;
+}
+
+.menu{
+list-style:none;
+}
+
+.menu li{
+padding:12px;
+margin:6px 0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.menu li:hover,
+.active{
+background:var(--main);
+}
+
+/* MAIN */
+
+.main{
+margin-left:240px;
+padding:20px;
+width:100%;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.search{
+padding:10px;
+width:300px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* TITLE */
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.btn{
+background:var(--main);
+color:white;
+padding:10px 15px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* SEARCH BOX */
+
+.search-box{
+margin-bottom:15px;
+}
+
+.search-box input{
+width:350px;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* TABLE */
+
+.table-box{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+th{
+background:#fafafa;
+}
+
+.amount{
+color:var(--main);
+font-weight:bold;
+}
+a{
+    text-decoration:none;
+    color:white;
+    }
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:bold;
+font-size:16px;
+}
+
+.logo img{
+width:180px;   /* small logo */
+height:90px;
+object-fit:contain;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+  <img src="{{ url_for('static', filename='indian_logo.png') }}" alt="Logo">
+
+</div>
+<ul class="menu">
+<a href="{{url_for('admin_dashboard')}}"> <li >Dashboard</li></a>
+<a href="{{url_for('product')}}"><li>Products</li></a>
+    <a href="{{url_for('billing')}}"><li>Billing / POS</li></a>
+    <a href="{{url_for('sales')}}"><li>Sales</li></a>
+    <a href="{{url_for('low_stock')}}"><li>Low Stock</li></a>
+    <a href="{{url_for('customers')}}"><li style="background:#E66B19">Customers</li></a>
+
+    <a href="{{url_for('reports')}}"><li>Reports</li></a>
+</ul>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="header">
+
+<div style="margin-left:950px;">🔔 GOWTHAM</div>
+
+</div>
+
+<div class="top">
+<div>
+<h2>Customers</h2>
+
+</div>
+
+</div>
+
+<!-- SEARCH -->
+
+<div class="search-box">
+<input type="text" id="searchCustomer" placeholder="Search by name or phone...">
+</div>
+
+<!-- TABLE -->
+
+<div class="table-box">
+
+<table id="customerTable">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Phone</th>
+    <th>Payment type</th>
+    <th>Total amount</th>
+<th>Date</th>
+    <th>UPI  number</th>
+
+</tr>
+</thead>
+
+<tbody>
+
+{% for c in customers %}
+<tr>
+<td>{{ c.customer_name }}</td>
+    <td>{{ c.phone }}</td>
+<td>{{ c.payment_type }}</td>
+<td class="amount">₹{{ c.total_amount }}</td>
+<td >{{ c.date }}</td>
+    {% if c.gpay!=None %}
+<td>{{ c.gpay }}</td>
+    {% else %}
+    <td>-</td>
+    {%endif%}
+</tr>
+{% endfor %}
+
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+/* SEARCH FUNCTION */
+
+document.getElementById("searchCustomer").addEventListener("keyup",function(){
+
+let value=this.value.toLowerCase()
+let rows=document.querySelectorAll("#customerTable tbody tr")
+
+rows.forEach(row=>{
+let text=row.innerText.toLowerCase()
+row.style.display=text.includes(value) ? "" : "none"
+})
+
+})
+
+</script>
+
+</body>
+</html>

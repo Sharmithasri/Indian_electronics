@@ -1,4 +1,3 @@
-from idlelib.rpc import request_queue
 
 from flask import Flask, render_template, request, redirect, session
 from flask_mysqldb import MySQL

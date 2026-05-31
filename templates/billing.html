@@ -375,6 +375,140 @@ width:180px;   /* small logo */
 height:90px;
 object-fit:contain;
 }
+
+    /* 📱 Tablet */
+@media (max-width: 1024px){
+
+    .container{
+        grid-template-columns:1fr;
+    }
+
+    .cart{
+        position:relative;
+        top:0;
+        height:auto;
+    }
+
+    .products{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .search{
+        width:250px;
+    }
+}
+
+/* 📱 Mobile */
+@media (max-width: 768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        height:auto;
+        position:relative;
+        padding:10px;
+    }
+
+    .menu{
+        display:flex;
+        flex-wrap:wrap;
+        gap:5px;
+    }
+
+    .menu li{
+        padding:8px;
+        font-size:13px;
+    }
+
+    .main{
+        margin-left:0;
+        padding:10px;
+    }
+
+    .header{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .search{
+        width:100%;
+    }
+
+    .filters{
+        flex-direction:column;
+    }
+
+    .filters select{
+        width:100% !important;
+    }
+
+    .products{
+        grid-template-columns:1fr;
+    }
+
+    .cart{
+        height:auto;
+        position:relative;
+        top:0;
+    }
+
+    .cart-item{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    .cart-actions{
+        width:100%;
+        justify-content:flex-start;
+    }
+
+    .logo img{
+        width:130px;
+        height:auto;
+    }
+}
+
+/* 📱 Small Mobile */
+@media (max-width: 480px){
+
+    .product{
+        padding:10px;
+    }
+
+    .cart{
+        padding:15px;
+    }
+
+    .card-box{
+        padding:10px;
+    }
+
+    .total{
+        font-size:18px;
+    }
+
+    .gen-btn{
+        font-size:14px;
+        padding:10px;
+    }
+
+    input,
+    select{
+        font-size:14px;
+    }
+
+    .cart-title{
+        font-size:13px;
+    }
+
+    .cart-sub{
+        font-size:11px;
+    }
+}
 </style>
 
 </head>
@@ -498,7 +632,7 @@ justify-content:center;align-items:center;z-index:999;">
 <div style="padding:15px" id="billContent"></div>
 
 <div style="padding:10px;text-align:center">
-<button onclick="printBill()">Confirm</button>
+<button onclick="submitBill()">Confirm</button>
 <button onclick="closeBill()">Close</button>
 </div>
 
@@ -568,6 +702,8 @@ cursor:pointer;
 
 /* 🔥 DATA */
 const products = {{ products | tojson }};
+
+
 let cart = [];
 let filteredProducts = [...products];
 let userType = "customer";
@@ -669,83 +805,106 @@ function addToCart(id){
 /* 🔥 CART */
 function renderCart(){
 
-  let div = document.getElementById("cartItems");
-  div.innerHTML = "";
+    let div = document.getElementById("cartItems");
+    div.innerHTML = "";
 
-  let total = 0;
-  let totalItems = 0;   // 🔥 NEW
+    let total = 0;
+    let totalItems = 0;
 
-  cart.forEach(item => {
+    cart.forEach(item => {
 
-    let p = products.find(x => x.product_id === item.id);
+        let p = products.find(x => x.product_id === item.id);
 
-    let basePrice = (userType === "mechanic") ? p.mechanic_price : p.selling_price;
-    let price = item.customPrice ? item.customPrice : basePrice;
+        let basePrice =
+            (userType === "mechanic")
+            ? parseFloat(p.mechanic_price)
+            : parseFloat(p.selling_price);
 
-    total += price * item.qty;
-    totalItems += item.qty;   // 🔥 ADD THIS
+        let price = item.customPrice || basePrice;
 
-    div.innerHTML += `
-    <div class="cart-item">
+        total += price * item.qty;
+        totalItems += item.qty;
 
-      <div class="cart-info">
-        <div class="cart-title">${p.name}</div>
-        <div class="cart-sub">₹${price} × ${item.qty} = ₹${price * item.qty}</div>
-      </div>
+        div.innerHTML += `
+        <div class="cart-item">
 
-      <div class="cart-actions">
-        <button onclick="changeQty(${item.id},-1)">−</button>
-        <span>${item.qty}</span>
-        <button onclick="changeQty(${item.id},1)">+</button>
-      </div>
+            <div class="cart-info">
+                <div class="cart-title">${p.name}</div>
 
-    </div>
-    `;
-  });
+                <div class="cart-sub">
+                    ₹${price} × ${item.qty} = ₹${price * item.qty}
+                </div>
+            </div>
 
-  document.getElementById("total").innerText = total;
+            <div class="cart-actions">
+                <button onclick="changeQty(${item.id},-1)">−</button>
 
-  // 🔥 THIS IS THE ONLY IMPORTANT CHANGE
-  document.getElementById("cartCount").innerText = totalItems;
+                <span>${item.qty}</span>
 
-  if(cart.length === 0){
-    div.innerHTML = "Add products";
-  }
+                <button onclick="changeQty(${item.id},1)">+</button>
+
+                <button onclick="editPrice(${item.id})">
+                    ✏️
+                </button>
+            </div>
+
+        </div>
+        `;
+    });
+
+    document.getElementById("total").innerText = total;
+    document.getElementById("subtotal").innerText = total;
+    document.getElementById("cartCount").innerText = totalItems;
+
+    if(cart.length === 0){
+        div.innerHTML = "Add products";
+    }
 }
 /* 🔥 EDIT PRICE */
+
+
+
 function editPrice(id){
 
-  currentEditId = id;
+    currentEditId = id;
 
-  let item = cart.find(x => x.id === id);
-  let p = products.find(x => x.product_id === id);
+    let item = cart.find(x => x.id === id);
+    let p = products.find(x => x.product_id === id);
 
-  let basePrice = (userType === "mechanic") ? p.mechanic_price : p.selling_price;
+    let basePrice =
+        (userType === "mechanic")
+        ? parseFloat(p.mechanic_price)
+        : parseFloat(p.selling_price);
 
-  document.getElementById("editPriceInput").value = item.customPrice || basePrice;
+    document.getElementById("editPriceInput").value =
+        item.customPrice || basePrice;
 
-  document.getElementById("editModal").style.display = "flex";
+    document.getElementById("editModal").style.display = "flex";
 }
 function savePrice(){
 
-  let value = document.getElementById("editPriceInput").value;
+    let newPrice = parseFloat(
+        document.getElementById("editPriceInput").value
+    );
 
-  let newPrice = parseFloat(value);
+    if(isNaN(newPrice) || newPrice <= 0){
+        alert("Enter valid price");
+        return;
+    }
 
-  if(isNaN(newPrice) || newPrice <= 0){
-    alert("Invalid price ❌");
-    return;
-  }
+    let item = cart.find(x => x.id === currentEditId);
 
-  let item = cart.find(x => x.id === currentEditId);
+    if(item){
+        item.customPrice = newPrice;
+    }
 
-  item.customPrice = newPrice;
+    document.getElementById("editModal").style.display = "none";
 
-  closeEdit();
-  renderCart();
+    renderCart();
 }
+
 function closeEdit(){
-  document.getElementById("editModal").style.display = "none";
+    document.getElementById("editModal").style.display = "none";
 }
 /* 🔥 CHANGE QTY */
 function changeQty(id,val){
@@ -1013,6 +1172,14 @@ win.close();
 
 function closeAlert(){
   document.getElementById("customAlert").style.display = "none";
+}
+    window.onload = function(){
+
+    const params = new URLSearchParams(window.location.search);
+
+    if(params.get("print") === "1"){
+        printBill();
+    }
 }
 </script>
 

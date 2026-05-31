@@ -9,13 +9,11 @@ app=Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 
-
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Vdp_30664711'
+app.config['MYSQL_USER'] = 'indian_user'   # or whatever you use
+app.config['MYSQL_PASSWORD'] = 'Indian@123'
 app.config['MYSQL_DB'] = 'indian'
-
-app.config['MYSQL_CURSORCLASS']='DictCursor'
+app.config['MYSQL_PORT'] = 3306
 mysql=MySQL(app)
 
 @app.route('/')

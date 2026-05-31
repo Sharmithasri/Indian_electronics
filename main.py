@@ -13,6 +13,7 @@ app.config['MYSQL_USER'] = 'indian_user'   # or whatever you use
 app.config['MYSQL_PASSWORD'] = 'Indian@123'
 app.config['MYSQL_DB'] = 'indian'
 app.config['MYSQL_PORT'] = 3306
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql=MySQL(app)
 
 @app.route('/')
